@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Doctor Appointment Reminder</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #fff0f5;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    header {
+        background: #e91e63;
+        color: white;
+        padding: 15px;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    .container {
+        background: white;
+        padding: 25px;
+        border-radius: 12px;
+        width: 380px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        margin: 40px auto;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 15px;
+    }
+
+    label {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    input, textarea, button {
+        width: 100%;
+        padding: 10px;
+        margin-top: 8px;
+        margin-bottom: 10px;
+        border-radius: 6px;
+        border: 1px solid #ccc;
+    }
+
+    button {
+        background: #e91e63;
+        color: white;
+        border: none;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background: #c2185b;
+    }
+
+    .reminder {
+        background: #f9f9f9;
+        padding: 10px;
+        margin-top: 10px;
+        border-radius: 8px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .delete-btn {
+        background: red;
+        color: white;
+        border: none;
+        padding: 5px 8px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    .countdown {
+        font-size: 12px;
+        color: gray;
+    }
+
+    .note {
+        font-size: 13px;
+        color: #333;
+    }
+
+    footer {
+        background: #e91e63;
+        color: white;
+        padding: 12px;
+        font-size: 14px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+     FemAI Care
+</header>
+
+<div class="container">
+
+    <h2>Set Your Reminder</h2>
+
+    <label>Enter the date of appointment:</label>
+    <input type="date" id="date">
+
+    <label>Enter the time of appointment:</label>
+    <input type="time" id="time">
+
+    <label>Enter doctor / purpose:</label>
+    <textarea id="note" placeholder="Eg: Dental checkup"></textarea>
+
+    <button onclick="addReminder()">Set Reminder</button>
+
+    <div id="remindersList"></div>
+</div>
+
+<footer>
+    © 2026 FemAI Care | Designed for Easy Healthcare Access
+</footer>
+
+<script>
+    let reminders = JSON.parse(localStorage.getItem("reminders")) || [];
+
+    function saveReminders() {
+        localStorage.setItem("reminders", JSON.stringify(reminders));
+    }
+
+    function addReminder() {
+        let date = document.getElementById("date").value;
+        let time = document.getElementById("time").value;
+        let note = document.getElementById("note").value;
+
+        if (!date || !time) {
+            alert("Please enter both date and time!");
+            return;
+        }
+
+        let dateTime = new Date(date + "T" + time);
+
+        reminders.push({
+            time: dateTime.getTime(),
+            note: note,
+            triggered: false
+        });
+
+        saveReminders();
+        displayReminders();
+    }
+
+    function deleteReminder(index) {
+        reminders.splice(index, 1);
+        saveReminders();
+        displayReminders();
+    }
+
+    function formatTime(diff) {
+        let days = Math.floor(diff / (1000 * 60 * 60 * 24));
+        let hours = Math.floor((diff / (1000 * 60 * 60)) % 24);
+        let minutes = Math.floor((diff / (1000 * 60)) % 60);
+
+        return `${days}d ${hours}h ${minutes}m left`;
+    }
+
+    function displayReminders() {
+        let list = document.getElementById("remindersList");
+        list.innerHTML = "";
+
+        reminders.forEach((reminder, index) => {
+            let div = document.createElement("div");
+            div.className = "reminder";
+
+            let time = new Date(reminder.time);
+            let now = new Date();
+            let diff = reminder.time - now;
+
+            let countdown = diff > 0 ? formatTime(diff) : "Due now!";
+
+            div.innerHTML = `
+                <div>
+                    <strong>${time.toLocaleString()}</strong>
+                    <div class="countdown">${countdown}</div>
+                    <div class="note">${reminder.note || ""}</div>
+                </div>
+                <button class="delete-btn" onclick="deleteReminder(${index})">X</button>
+            `;
+
+            list.appendChild(div);
+        });
+    }
+
+    function checkReminders() {
+        let now = new Date().getTime();
+
+        reminders.forEach((reminder) => {
+            if (now >= reminder.time && !reminder.triggered) {
+
+                let message = "🔔 Reminder: Doctor Appointment!";
+
+                if (reminder.note && reminder.note.trim() !== "") {
+                    message += "\nPurpose: " + reminder.note;
+                }
+
+                alert(message);
+
+                reminder.triggered = true;
+                saveReminders();
+            }
+        });
+
+        displayReminders();
+    }
+
+    setInterval(checkReminders, 1000);
+    displayReminders();
+</script>
+
+</body>
+</html>

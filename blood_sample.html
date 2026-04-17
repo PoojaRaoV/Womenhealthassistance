@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Blood Test & Lab Finder</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #fff0f5;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+
+     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+header {
+    background: #e91e63;
+    color: white;
+    padding: 15px;
+    font-size: 22px;
+}
+
+/* Container */
+.container {
+    margin-top: 40px;
+    flex:1;
+}
+
+/* Buttons */
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 25px;
+    background: #e91e63;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    transition: 0.3s ease;
+}
+
+button:hover {
+    background: #c2185b;
+}
+
+/* Cards */
+.card {
+    margin: 20px auto;
+    width: 300px;
+    padding: 20px;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+/* Heading */
+h2 {
+    color: #e91e63;
+}
+
+/* Footer */
+footer {
+    background: #e91e63;
+    color: white;
+    padding: 12px;
+    font-size: 14px;
+}
+</style>
+</head>
+
+<body>
+
+<header>FemAI Care</header>
+
+<div class="container">
+
+    <h2>Find Services Near You</h2>
+
+    <button onclick="findLabs()">Nearby Blood Labs</button>
+    <button onclick="homeCollection()">Home Sample Collection</button>
+
+    <div id="results"></div>
+
+</div>
+
+<!-- FOOTER ADDED -->
+<footer>
+    © 2026 FemAI Care | Designed for Easy Healthcare Access
+</footer>
+
+<script>
+// Get user location
+function getLocation(callback) {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            position => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                callback(lat, lon);
+            },
+            () => {
+                alert("Location access denied. Please enable location.");
+            }
+        );
+    } else {
+        alert("Geolocation not supported.");
+    }
+}
+
+// Open Google Maps search
+function findLabs() {
+    getLocation((lat, lon) => {
+        const url = `https://www.google.com/maps/search/blood+test+lab/@${lat},${lon},15z`;
+        window.open(url, "_blank");
+    });
+}
+
+// Home collection services
+function homeCollection() {
+    getLocation((lat, lon) => {
+        const url = `https://www.google.com/maps/search/home+blood+collection+services/@${lat},${lon},15z`;
+        window.open(url, "_blank");
+    });
+}
+</script>
+
+</body>
+</html>

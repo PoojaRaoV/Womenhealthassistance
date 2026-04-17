@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Find Nearby Gynecologists</title>
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background: #fff0f5;
+        margin: 0;
+        padding: 0;
+        text-align: center;
+    }
+
+    header {
+        background: #e91e63;
+        color: white;
+        padding: 15px;
+        font-size: 22px;
+        font-weight: bold;
+    }
+
+    h2 {
+        color: #e91e63;
+        margin-top: 50px;
+    }
+
+    button {
+        padding: 12px 25px;
+        font-size: 16px;
+        background-color: #e91e63;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #c2185b;
+    }
+
+    p {
+        margin-top: 20px;
+        color: #555;
+    }
+
+    footer {
+        background: #e91e63;
+        color: white;
+        padding: 12px;
+        font-size: 14px;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+    }
+</style>
+</head>
+
+<body>
+
+<header>
+    FemAI Care
+</header>
+
+<h2>Click here to find Nearby Gynaecologists....</h2>
+
+<button onclick="findDoctors()">Find Doctors Near Me</button>
+
+<p id="status"></p>
+
+<footer>
+    © 2026 FemAI Care | Designed for Easy Healthcare Access
+</footer>
+
+<script>
+function findDoctors() {
+    const status = document.getElementById("status");
+
+    if (!navigator.geolocation) {
+        status.innerHTML = "Geolocation is not supported by your browser.";
+        return;
+    }
+
+    status.innerHTML = "Detecting your location...";
+
+    navigator.geolocation.getCurrentPosition(
+        (position) => {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+
+            status.innerHTML = "Opening nearby gynecologists...";
+
+            // Open Google Maps search
+            const url = `https://www.google.com/maps/search/gynecologist/@${lat},${lng},15z`;
+            window.open(url, "_blank");
+        },
+        () => {
+            status.innerHTML = "Unable to retrieve your location.";
+        }
+    );
+}
+</script>
+
+</body>
+</html>
