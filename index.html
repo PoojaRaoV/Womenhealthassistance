@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Women's Health Tracker</title>
+
+<style>
+body {
+    font-family: Arial;
+    background: #fff0f5;
+    margin: 0;
+    text-align: center;
+}
+
+header {
+    background: #e91e63;
+    color: white;
+    padding: 15px;
+    font-size: 22px;
+}
+
+.container {
+    margin-top: 40px;
+}
+
+input {
+    padding: 10px;
+    margin: 8px;
+    width: 250px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+}
+
+button {
+    padding: 12px 20px;
+    margin: 10px;
+    border: none;
+    border-radius: 25px;
+    background: #e91e63;
+    color: white;
+    cursor: pointer;
+}
+
+.result {
+    margin-top: 20px;
+    color: blue;
+}
+</style>
+</head>
+
+<body>
+
+<header>FemAI Care</header>
+
+<div class="container">
+    <h2>Women's Health Input</h2>
+
+    <form method="POST">
+        <input name="name" placeholder="Name"><br>
+        <input name="age" placeholder="Age"><br>
+        <input name="height" placeholder="Height"><br>
+        <input name="weight" placeholder="Weight"><br>
+        <input name="condition" placeholder="PCOS/PCOD"><br>
+        <input name="period" placeholder="MM/DD/YYYY"><br>
+        <input name="tsh" placeholder="TSH"><br>
+        <input name="hb" placeholder="Hemoglobin"><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    {% if result %}
+    <div class="result">
+        <p>BMI: {{ result.bmi }} ({{ result.category }})</p>
+        <p>Next Period: {{ result.period }}</p>
+        <p>Thyroid: {{ result.thyroid }}</p>
+        <p>Hemoglobin: {{ result.hemoglobin }}</p>
+    </div>
+    {% endif %}
+</div>
+
+<footer>
+    © 2026 FemAI Care
+</footer>
+
+</body>
+</html>
